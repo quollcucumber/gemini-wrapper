@@ -225,7 +225,11 @@
     // ── Send ──────────────────────────────────────────────────────────────────
     async function sendMessage() {
       const text = inputEl.value.trim();
-      if (!text || !currentSessionId) return;
+      console.log("[send] clicked, text:", text, "sessionId:", currentSessionId);
+      if (!text || !currentSessionId) {
+        console.warn("[send] aborting — missing text or sessionId");
+        return;
+      }
 
       inputEl.value = "";
       inputEl.style.height = "auto";
