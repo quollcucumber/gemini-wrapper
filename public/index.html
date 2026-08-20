@@ -47,7 +47,9 @@
 
     // Call our Vercel serverless API
     async function callChatApi(sessionId, message) {
+      console.log("[chat] getting id token...");
       const idToken = await auth.currentUser.getIdToken();
+      console.log("[chat] sending request to /api/chat");
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: {
@@ -56,11 +58,15 @@
         },
         body: JSON.stringify({ sessionId, message }),
       });
+      console.log("[chat] response status:", res.status);
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
+        console.error("[chat] error response:", err);
         throw new Error(err.error || `Request failed (${res.status})`);
       }
-      return res.json();
+      const data = await res.json();
+      console.log("[chat] reply received:", data);
+      return data;
     }
 
     // ── DOM refs ─────────────────────────────────────────────────────────────
